@@ -14,17 +14,18 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3000",
+        //! Important use your own ip address and not localhost so you can connect on phone this way too
+        origin: "http://192.168.1.43:3000",
         methods: ["GET", "POST"]
     }
 });
 
-// makes a connection to socket.io and listens for emits
+//creates connection to a socket and listens for emits
 io.on('connection', (socket) => {
 
     console.log(`User Connected: ${socket.id}`)
 
-    // listens for emit and then call joins to subscribe the socket to a given channel
+    // listens for emit and then call join on the socket to subscribe the socket to a given channel
     socket.on('join_room', (data) => {
         console.log('Joining Room: ' + data);
         socket.join(data);
@@ -34,10 +35,19 @@ io.on('connection', (socket) => {
     socket.on("send_message", (data) => {
         console.log('Message Received in server: ' + data.message);
 
-        // emits a message to user listening
+        // emits a message to user listening on same room
         socket.to(data.room).emit('receive_message', data);
     })
+
+    // to all clients in room1
+    // io.in("room1").emit(/* ... */);
 });
+
+// express sample
+// app.get('/', function(req, res){
+//     res.send("hello world!");
+// });
+  
 
 // starts up server on portNumber
 server.listen(portNumber, () => {

@@ -3,30 +3,31 @@ import io from 'socket.io-client';
 import { useEffect, useState } from 'react';
 
 // connects to backend server io
-const socket = io.connect("http://localhost:4000");
+//! Important use your own ip address and not localhost so you can connect on phone this way too
+const socket = io.connect("http://192.168.1.43:4000");
 
 function App() {
 
-  // Room State
+  // room State
   const [room, setRoom] = useState("");
 
-  // Messages States
+  // messages States
   const [message, setMessage] = useState("");
   const [messageReceived, setMessageReceived] = useState("");
 
-  // Runs when join room button is clicked. Calls join_room in backend, passing the room.
+  // runs when join room button is clicked. Calls join_room in backend, passing the room.
   const joinRoom = () => {
     if (room !== "") {
       socket.emit("join_room", room);
     }
   };
 
-  // Runs when send message button is clicked. Calls send_message in backend, passing the message and room.
+  // runs when send message button is clicked. Calls send_message in backend, passing the message and room.
   const sendMessage = () => {
     socket.emit("send_message", { message, room });
   };
 
-  // Listens for a receive_message call from backend. Updates messageRecieved with the message. 
+  // listens for a receive_message call from backend. Updates messageRecieved with the message. 
   useEffect(() => {
     socket.on("receive_message", (data) => {
       setMessageReceived(data.message);
@@ -59,9 +60,8 @@ function App() {
 
       <button onClick={sendMessage}>Send Message</button>
 
-      <h1>Message: </h1>
-      {'Message : ' + messageReceived}
-
+      <h1>{'Message : ' + messageReceived}</h1>
+      
     </div>
   );
 }
