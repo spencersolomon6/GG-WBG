@@ -28,7 +28,7 @@ function App() {
 
   // Listens for a receive_message call from backend. Updates messageRecieved with the message. 
   useEffect(() => {
-    socket.on("recieve_message", (data) => {
+    socket.on("receive_message", (data) => {
       setMessageReceived(data.message);
       console.log(data.message);
     })
