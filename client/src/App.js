@@ -36,32 +36,26 @@ function App() {
   }, [socket])
 
   return (
-    <div className="App">
-
-      <h1>Web Based Game</h1>
-
+    <div className="flex flex-col justify-center items-center bg-gray-200 py-4 px-6 rounded-lg shadow-lg h-screen">
+      <h1 className="text-2xl font-bold text-blue-500">Web Based Game</h1>
       <input
         placeholder='Room Number'
         onChange={(event) => {
           setRoom(event.target.value);
         }}
+        className="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 mt-6 mb-2 inline"
       />
-
-      <button onClick={joinRoom}>Join Room</button>
-
+      <button onClick={joinRoom} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">Join Room</button>
       <br /><br />
-
       <input
         placeholder='Message'
         onChange={(event) => {
           setMessage(event.target.value);
         }}
+        className="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4"
       />
-
-      <button onClick={sendMessage}>Send Message</button>
-
-      <h1>{'Message : ' + messageReceived}</h1>
-      
+      <button onClick={sendMessage} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full my-2">Send Message</button>
+      <h1 className="text-xl font-bold text-gray-900 mt-4">{'Message : ' + messageReceived}</h1>
     </div>
   );
 }
