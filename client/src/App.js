@@ -2,16 +2,18 @@ import './App.css';
 import io from 'socket.io-client';
 import { useEffect, useState } from 'react';
 
+//! Important - when trying to test on mobile use your own ip address and not localhost
+const DOMAIN = 'http://localhost:4000'
+
 // connects to backend server io
-//! Important use your own ip address and not localhost so you can connect on phone this way too
-const socket = io.connect("http://192.168.1.43:4000");
+const socket = io.connect(DOMAIN);
 
 function App() {
 
-  // room State
+  // room state
   const [room, setRoom] = useState("");
 
-  // messages States
+  // messages states
   const [message, setMessage] = useState("");
   const [messageReceived, setMessageReceived] = useState("");
 
@@ -20,7 +22,7 @@ function App() {
   const [gameOver, setGameOver] = useState(false);
   const [winner, setWinner] = useState("");
 
-  // Game Loop
+  // Game "Loop"
   useEffect(() => {
     if (!gameOver) {
       const interval = setInterval(() => {
@@ -38,7 +40,7 @@ function App() {
       }, 1000);
       return () => clearInterval(interval);
     }
-  }, [gameNumber, gameOver, socket.id]);
+  }, [gameNumber, gameOver]);
 
 
   // runs when join room button is clicked. Calls join_room in backend, passing the room.

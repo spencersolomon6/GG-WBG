@@ -3,6 +3,9 @@ const { Server } = require('socket.io');
 const http = require('http');
 const cors = require('cors');
 
+//! Important - when trying to test on mobile use your own ip address and not localhost
+const DOMAIN = 'http://localhost:3000'
+
 // express setup
 const app = express();
 const portNumber = process.env.PORT || 4000;
@@ -14,8 +17,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        //! Important use your own ip address and not localhost so you can connect on phone this way too
-        origin: "http://192.168.1.43:3000",
+        origin: DOMAIN,
         methods: ["GET", "POST"]
     }
 });
