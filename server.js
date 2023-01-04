@@ -31,7 +31,7 @@ io.on('connection', (socket) => {
         socket.join(data);
     });
 
-    // sends a message to the room the user
+    // sends a message to the room of the user
     socket.on("send_message", (data) => {
         console.log('Message Received in server: ' + data.message);
 
@@ -39,15 +39,16 @@ io.on('connection', (socket) => {
         socket.to(data.room).emit('receive_message', data);
     })
 
-    // to all clients in room1
-    // io.in("room1").emit(/* ... */);
+    // to all clients in room1 example
+    // io.to("room1").emit(/*...*/);
 });
 
+//-----------------
 // express sample
 // app.get('/', function(req, res){
 //     res.send("hello world!");
 // });
-  
+//-----------------  
 
 // starts up server on portNumber
 server.listen(portNumber, () => {
