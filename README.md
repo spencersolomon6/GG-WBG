@@ -7,4 +7,5 @@ A web based game where all of your friends can connect and play.
 - Node
 - Express
 - React
+- Tailwind
 - Socket.io

@@ -2,6 +2,10 @@ const express = require('express');
 const { Server } = require('socket.io');
 const http = require('http');
 const cors = require('cors');
+const { randomUUID } = require('crypto');
+
+//! Important - when trying to test on mobile use your own ip address and not localhost
+const DOMAIN = 'http://localhost:3000'
 
 // express setup
 const app = express();
@@ -14,40 +18,47 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        //! Important use your own ip address and not localhost so you can connect on phone this way too
-        origin: "http://192.168.1.43:3000",
+        origin: DOMAIN,
         methods: ["GET", "POST"]
     }
 });
+
+// Instance Variables
+
+const rooms = {};
 
 //creates connection to a socket and listens for emits
 io.on('connection', (socket) => {
 
     console.log(`User Connected: ${socket.id}`)
 
-    // listens for emit and then call join on the socket to subscribe the socket to a given channel
-    socket.on('join_room', (data) => {
-        console.log('Joining Room: ' + data);
-        socket.join(data);
-    });
-
-    // sends a message to the room the user
-    socket.on("send_message", (data) => {
-        console.log('Message Received in server: ' + data.message);
-
-        // emits a message to user listening on same room
-        socket.to(data.room).emit('receive_message', data);
+    // host a room
+    socket.on('host_room', (roomName) => {
+        console.log(`Host room: ` + roomName);
+        socket.join(roomName);
+    
     })
 
-    // to all clients in room1
-    // io.in("room1").emit(/* ... */);
+    // listens for emit and then call join on the socket to subscribe the socket to a given channel
+    socket.on('join_room', (roomName) => {
+        console.log('Joining Room: ' + roomName);
+        socket.join(roomName);
+    });
+
+    socket.on('ready', () => {
+        console.log(socket.id, 'is ready!');
+    })
+
+    socket.on('startGame', (room) => {
+        console.log(socket.id, 'is starting a game!');
+        io.in(room).emit('start');
+    })
+
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });
 });
 
-// express sample
-// app.get('/', function(req, res){
-//     res.send("hello world!");
-// });
-  
 
 // starts up server on portNumber
 server.listen(portNumber, () => {
